@@ -25,8 +25,12 @@ for index, row in sheet.iterrows():
         cidade[row["BAIRRO / CIDADE"]]["INSTALADOS"] += row["INSTALADOS"]
     cidade[row["BAIRRO / CIDADE"]]["HP LIVRE"] += row[" HP LIVRE"]
 
+
+for key, value in cidade.items():
+    percentage = value["INSTALADOS"] * 100 / value["HPs CADASTRADOS"]
+    cidade[key]["penetracao"] = str(percentage) + "%"
+
 cidade_sorted = dict(sorted(cidade.items(), key=lambda k: k[1]['HPs CADASTRADOS'], reverse=True))
-print(cidade_sorted.items())
 
 print("criando arquivo excel...")
 # Create the workbook and sheet for Excel
