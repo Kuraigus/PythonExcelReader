@@ -30,23 +30,30 @@ for key, value in cidade.items():
     percentage = value["INSTALADOS"] * 100 / value["HPs CADASTRADOS"]
     cidade[key]["penetracao"] = "{:.2f}%".format(percentage)
 
-cidade_sorted = dict(
+cidade_sorted_cadastros = dict(
     sorted(cidade.items(), key=lambda k: k[1]['HPs CADASTRADOS'], reverse=True))
+
+cidade_sorted_pen = dict(
+    sorted(cidade.items(), key=lambda k: k[1]['penetracao']))
+
 
 print("criando arquivo excel...")
 # Create the workbook and sheet for Excel
 workbook = openpyxl.Workbook()
 new_sheet = workbook.active
 
-new_sheet.cell(row=1, column=1, value="BAIRRO / CIDADE")
-new_sheet.cell(row=1, column=2, value="HPs CADASTRADOS")
-new_sheet.cell(row=1, column=3, value="INSTALADOS")
-new_sheet.cell(row=1, column=4, value="HP LIVRE")
-new_sheet.cell(row=1, column=5, value="PENETRAÇÃO")
+row = 1
+new_sheet.cell(row=row, column=1, value="Lista por cadastrados")
 
-# openpyxl does things based on 1 instead of 0
-row = 2
-for key, values in cidade_sorted.items():
+row += 1
+new_sheet.cell(row=row, column=1, value="BAIRRO / CIDADE")
+new_sheet.cell(row=row, column=2, value="HPs CADASTRADOS")
+new_sheet.cell(row=row, column=3, value="INSTALADOS")
+new_sheet.cell(row=row, column=4, value="HP LIVRE")
+new_sheet.cell(row=row, column=5, value="PENETRAÇÃO")
+
+row += 1
+for key, values in cidade_sorted_cadastros.items():
     # Put the key in the first column for each key in the dictionary
     new_sheet.cell(row=row, column=1, value=key)
     column = 2
@@ -55,6 +62,29 @@ for key, values in cidade_sorted.items():
         new_sheet.cell(row=row, column=column, value=element)
         column += 1
     row += 1
+
+row += 2
+
+new_sheet.cell(row=row, column=1, value="Lista por penetracao")
+
+row += 1
+new_sheet.cell(row=row, column=1, value="BAIRRO / CIDADE")
+new_sheet.cell(row=row, column=2, value="HPs CADASTRADOS")
+new_sheet.cell(row=row, column=3, value="INSTALADOS")
+new_sheet.cell(row=row, column=4, value="HP LIVRE")
+new_sheet.cell(row=row, column=5, value="PENETRAÇÃO")
+
+row += 1
+for key, values in cidade_sorted_pen.items():
+    # Put the key in the first column for each key in the dictionary
+    new_sheet.cell(row=row, column=1, value=key)
+    column = 2
+    for element in values.values():
+        # Put the element in each adjacent column for each element in the tuple
+        new_sheet.cell(row=row, column=column, value=element)
+        column += 1
+    row += 1
+
 
 workbook.save(filename="feedback.xlsx")
 
