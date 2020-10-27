@@ -31,13 +31,19 @@ print("criando arquivo excel...")
 workbook = openpyxl.Workbook()
 new_sheet = workbook.active
 
+new_sheet.cell(row = 1, column = 1, value="BAIRRO / CIDADE")
+new_sheet.cell(row = 1, column = 2, value="HPs CADASTRADOS")
+new_sheet.cell(row = 1, column = 3, value="INSTALADOS")
+new_sheet.cell(row = 1, column = 4, value="HP LIVRE")
+
+
 # openpyxl does things based on 1 instead of 0
-row = 1
+row = 2
 for key,values in cidade.items():
     # Put the key in the first column for each key in the dictionary
     new_sheet.cell(row=row, column=1, value=key)
     column = 2
-    for element in values:
+    for element in values.values():
         # Put the element in each adjacent column for each element in the tuple
         new_sheet.cell(row=row, column=column, value=element)
         column += 1
