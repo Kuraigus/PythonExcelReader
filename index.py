@@ -25,6 +25,8 @@ for index, row in sheet.iterrows():
         cidade[row["BAIRRO / CIDADE"]]["INSTALADOS"] += row["INSTALADOS"]
     cidade[row["BAIRRO / CIDADE"]]["HP LIVRE"] += row[" HP LIVRE"]
 
+cidade_sorted = dict(sorted(cidade.items(), key=lambda k: k[1]['HPs CADASTRADOS'], reverse=True))
+print(cidade_sorted.items())
 
 print("criando arquivo excel...")
 # Create the workbook and sheet for Excel
@@ -36,10 +38,9 @@ new_sheet.cell(row = 1, column = 2, value="HPs CADASTRADOS")
 new_sheet.cell(row = 1, column = 3, value="INSTALADOS")
 new_sheet.cell(row = 1, column = 4, value="HP LIVRE")
 
-
 # openpyxl does things based on 1 instead of 0
 row = 2
-for key,values in cidade.items():
+for key,values in cidade_sorted.items():
     # Put the key in the first column for each key in the dictionary
     new_sheet.cell(row=row, column=1, value=key)
     column = 2
